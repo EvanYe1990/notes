@@ -3,7 +3,7 @@
 html { font-family: sans-serif; /* 1 */ -ms-text-size-adjust: 100%; /* 2 */ -webkit-text-size-adjust: 100%; /* 2 */ }
 
 /** Remove default margin. */
-body { margin: 0; padding: 0; }
+body { margin: 0; padding: 0; font-size: 10px;}
 
 /* HTML5 display definitions ========================================================================== */
 /** Correct `block` display not defined for any HTML5 element in IE 8/9. Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox. Correct `block` display not defined for `main` in IE 11. */
@@ -266,7 +266,36 @@ a:hover { text-decoration: underline; }
   .btn + .btn { margin-top: 1rem; margin-left: 0; } }
 
 .page-header { color: #fff; text-align: center; background-color: #159957; background-image: linear-gradient(120deg, #155799, #159957); }
-@media screen and (min-width: 64em) { .page-header { padding: 5rem 6rem; } }
+@media screen and (min-width: 64em) {
+  .page-header { 
+    padding: 5rem 6rem; 
+    position: absolute;
+    width: 20%;
+    max-width: 270px;
+  }
+  .page-header .avator {
+    display: block;
+    margin: 0 auto 2rem;
+    width: 16rem;
+    height: 16rem;
+    background-image: url(/assets/images/avator.png);
+    background-size: cover;
+    border-radius: 50%;
+  }
+  .page-header .nav {
+      margin-top: 3rem;
+    }
+  .page-header .nav > a {
+    display: block;
+    line-height: 3rem;
+    color: #efefef;
+    text-decoration: none;
+  }
+    
+  .page-header .nav > a:hover {
+    color: #ccc;
+  }
+}
 @media screen and (min-width: 42em) and (max-width: 64em) { .page-header { padding: 3rem 4rem; } }
 @media screen and (max-width: 42em) { .page-header { padding: 2rem 1rem; } }
 
