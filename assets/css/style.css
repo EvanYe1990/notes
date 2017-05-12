@@ -266,7 +266,7 @@ a:hover { text-decoration: underline; }
   .btn + .btn { margin-top: 1rem; margin-left: 0; } }
 
 .page-header { color: #fff; text-align: center; background-color: #159957; background-image: linear-gradient(120deg, #155799, #159957); height: 100%;}
-.page-header .nav > a { display: block; line-height: 3rem; color: #efefef; text-decoration: none; }  
+.page-header .nav > a { padding: 0 .8rem; line-height: 3rem; color: #efefef; text-decoration: none; }  
 .page-header .nav > a:hover { color: #ccc; }
 @media screen and (min-width: 64em) {
   .page-header {  
@@ -284,6 +284,8 @@ a:hover { text-decoration: underline; }
     background-size: cover;
     border-radius: 50%;
   }
+
+  .page-header .nav > a { display: block; }
 }
 @media screen and (min-width: 42em) and (max-width: 64em) { 
   .page-header {  
@@ -301,6 +303,7 @@ a:hover { text-decoration: underline; }
     background-size: cover;
     border-radius: 50%;
   }
+  .page-header .nav > a { display: block; }
 }
 @media screen and (max-width: 42em) { .page-header { padding: 2rem 1rem; } }
 
