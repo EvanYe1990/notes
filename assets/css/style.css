@@ -265,18 +265,18 @@ a:hover { text-decoration: underline; }
 @media screen and (max-width: 42em) { .btn { display: block; width: 100%; padding: 0.75rem; font-size: 0.9rem; }
   .btn + .btn { margin-top: 1rem; margin-left: 0; } }
 
-.page-header { color: #fff; text-align: center; background-color: #159957; background-image: linear-gradient(120deg, #155799, #159957); }
+.page-header { color: #fff; text-align: center; background-color: #159957; background-image: linear-gradient(120deg, #155799, #159957); height: 100%;}
 @media screen and (min-width: 64em) {
   .page-header {  
     position: absolute;
     width: 20%;
-    max-width: 270px;
+    max-width: 27rem;
   }
   .page-header .avator {
     display: block;
-    margin: 0 auto 2rem;
-    width: 16rem;
-    height: 16rem;
+    margin: 2rem auto;
+    width: 10rem;
+    height: 10rem;
     background-image: url(/notes/assets/images/avator.png);
     background-size: cover;
     border-radius: 50%;
