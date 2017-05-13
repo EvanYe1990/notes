@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>video视频控制条-controls</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="/notes/assets/css/reset.css">
+  <style>
+    .video-player { width: 100%; }
+  </style>
+</head>
+<body>
+  <section>
+    <video id="video" class="video-player" controls="controls">
+      <source src="1.mp4" type="video/mp4" />
+      当前浏览器不支持video标签
+    </video>
+  </section>
+  <p>是否显示控制条：<span id="result"></span></p>
+</body>
+<script>
+  (function () {
+    var video = document.getElementById("video"),
+        result = document.getElementById("result"),
+        muteStatus = document.getElementById("muteStatus");
+    video.addEventListener("change", function () {
+      console.log(1)
+    });
+
+    video && result
+      && (result.innerHTML = video.controls ? "是<br>" : "否<br>")
+      && (result.innerHTML += video.muted ? "声音：静音" : "声音：正常")
+  })();
+</script>
+</html>

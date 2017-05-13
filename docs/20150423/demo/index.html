@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canva绘制video视频流</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="/notes/assets/css/reset.css">
+  <style>
+    #video { width: 100%; }
+  </style>
+</head>
+<body>
+  <section class="box">
+    <video src="1.mp4" id="video" controls autoplay loop webkit-playsinline></video>
+    <!-- <video src="2.mp4" id="video" controls autoplay loop webkit-playsinline></video> -->
+  </section>
+  <section class="cp-box">
+    <canvas id="canvas-video" width="100" height="100">浏览器不支持Canvas</canvas>
+  </section>
+</body>
+<script>
+  (function () {
+    var videoUtils = {
+      init: function () {
+        this.video = document.getElementById("video");
+        this.cvideo = document.getElementById("canvas-video");
+        this.cvideoCtx = this.cvideo.getContext("2d");
+
+        var self = this;
+        this.video.addEventListener("play", function () {
+          self.width = window.screen.width;
+          self.height = self.width * self.video.videoHeight / self.video.videoWidth
+
+          self.cvideo.setAttribute("width", self.width);
+          self.cvideo.setAttribute("height", self.height);
+          self.timerControl()
+        }, false);
+      },
+      timerControl: function () {
+        if (this.video.paused || this.video.ended) {
+          return false;
+        }
+        this.drawFrames();
+        var self = this;
+        setTimeout(function () {
+          self.timerControl();
+        }, 0)
+      },
+      drawFrames: function () {
+        var self = this,
+            frames,
+            length = 0,
+            i;
+        this.cvideoCtx.drawImage(this.video, 0, 0, this.width, this.height);
+        // frames = this.cvideoCtx.getImageData(0, 0, this.width, this.height);
+        // length= frames.data.length / 4;
+
+        // for (i = 0; i < length; i++) {
+        //   var r = frames.data[i * 4 + 0];
+        //   var g = frames.data[i * 4 + 1];
+        //   var b = frames.data[i * 4 + 2];
+        //   if (g > 100 && r > 100 && b < 43) {
+        //     frames.data[i * 4 + 3] = 0;
+        //   }
+        // };
+        return false;
+      }
+    }
+
+    videoUtils.init()
+  })();
+</script>
+</html>

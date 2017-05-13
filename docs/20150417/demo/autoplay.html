@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>video自动播放-autoplay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="/notes/assets/css/reset.css">
+  <style>
+    .video-player { width: 100%; }
+  </style>
+</head>
+<body>
+  <section>
+    <video id="video" class="video-player" controls="controls" autoplay="autoplay">
+      <source src="1.mp4" type="video/mp4" />
+      当前浏览器不支持video标签
+    </video>
+  </section>
+  <p>是否自动播放：<span id="result"></span></p>
+</body>
+<script>
+  (function () {
+    var video = document.getElementById("video"),
+        result = document.getElementById("result");
+    video && result && (result.innerHTML = video.autoplay ? "是" : "否")
+  })();
+</script>
+</html>
