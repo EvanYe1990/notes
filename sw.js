@@ -11,7 +11,7 @@
       CONFIG.path + '/',
       CONFIG.path + '/assets/css/style.css',
       CONFIG.path + '/assets/js/index.js',
-      CONFIG.path + '/docs/'
+      CONFIG.path + '/docs/*'
     ];
 
     self.addEventListener('install', function (e) {
