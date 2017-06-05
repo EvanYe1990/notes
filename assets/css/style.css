@@ -265,7 +265,13 @@ a:hover { text-decoration: underline; }
 @media screen and (max-width: 42em) { .btn { display: block; width: 100%; padding: 0.75rem; font-size: 0.9rem; }
   .btn + .btn { margin-top: 1rem; margin-left: 0; } }
 
-.page-header { color: #fff; text-align: center; background-color: #333; background-image: linear-gradient(120deg, #155799, #333); height: 100%;}
+.page-header { 
+  color: #fff; 
+  text-align: center; 
+  background-color: #333; 
+  background-image: linear-gradient(120deg, #155799, #333); 
+
+  height: 100%;}
 .page-header .nav > a { padding: 0 .8rem; line-height: 3rem; color: #efefef; text-decoration: none; }  
 .page-header .nav > a:hover { color: #ccc; }
 @media screen and (min-width: 64em) {
@@ -274,6 +280,7 @@ a:hover { text-decoration: underline; }
     left: 0;
     top: 0;
     width: 16rem;
+    background-image: url(/notes/assets/images/bg.jpeg);
   }
   .page-header .avator {
     display: block;
@@ -293,6 +300,7 @@ a:hover { text-decoration: underline; }
     left: 0;
     top: 0;
     width: 12rem;
+    background-image: url(/notes/assets/images/bg.jpeg);
   }
   .page-header .avator {
     display: block;
