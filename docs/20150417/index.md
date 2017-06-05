@@ -1,5 +1,6 @@
-# HTML5多媒体标签之视频video  
+# HTML5多媒体标签之视频video
 
+多媒体标签Video可以实现视频的自动播放、暂停、全屏等，低版本浏览器请注意兼容性。
 ```
 <video class="video-player" width="160" height="90">
   <source src="1.mp4" type="video/mp4" />
