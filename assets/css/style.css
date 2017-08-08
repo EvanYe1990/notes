@@ -272,7 +272,7 @@ a:hover { text-decoration: underline; }
   background-image: linear-gradient(120deg, #155799, #333); 
 
   height: 100%;}
-.page-header .nav > a { padding: 0 .8rem; line-height: 3rem; color: #efefef; text-decoration: none; }  
+.page-header .nav > a { padding: 0 .6rem; line-height: 3rem; color: #efefef; text-decoration: none; }  
 .page-header .nav > a:hover { color: #ccc; }
 @media screen and (min-width: 64em) {
   .page-header {  
