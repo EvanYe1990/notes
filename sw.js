@@ -1,5 +1,5 @@
   (function () {
-    var CACHE_VERSION = '20170801';
+    var CACHE_VERSION = '20170808';
 
     var CONFIG = {
       cacheName: 'notesCache' + CACHE_VERSION,
