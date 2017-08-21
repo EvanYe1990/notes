@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Socket</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; padding: 0; }
+    .ipt { border: 1px solid #ccc; }
+    .list { margin: 0; padding: 0; }
+    .list > li { list-style: none; padding: 0 24px;}
+    .list .right { text-align: right; }
+    .hidden { display: none; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+</head>
+<body>
+  <input type="text" class="ipt" id="ipt">
+  <input type="button" id="btnConnect" value="呼叫XXX">
+  <input type="button" id="btnSend" value="发送">
+  <input type="button" id="btnClose" class="hidden" value="关闭">
+  <ul id="list" class="list">
+  </ul>
+  <script>
+    class RTCPeer {
+      constructor (socket) {
+        this.socket = socket;
+        this.peerConnection = null;
+      }
+
+      connect () {
+        this.peerConnection = new RTCPeerConnection();
+        this.listenCandidate();
+      }
+
+      listenCandidate () {
+        // this.log('监听Candidate');
+        this.peerConnection.onicecandidate = (e) => {
+          if (e.candidate) {
+            this.log(`发送Candidate到远程服务器:\n${JSON.stringify(e.candidate)}`)
+            this.socket.emit('swap_candidate', e.candidate);
+          } else {
+            this.log('所有Candidate都已发送')
+          }
+        }
+      }
+
+      close () {
+        this.peerConnection = null;
+        this.dataChannel = null;
+        this.socket.emit('close_connection');
+        this.log(`RTC客户端 连接断开`)
+      }
+
+      createOffer () {
+        this.createOfferPeerDataChannel();
+        this.peerConnection
+          .createOffer()
+          .then((desc) => {
+            // this.log(`RTC客户端创建的offer信令: \n${desc.sdp}`)
+            this.setLocalDescription(desc);
+            // 向服务器端提交offer
+            this.socket.emit('create_offer', desc);
+          }, (error) => {
+            this.log(`createOffer failed: ${error}`)
+          })
+      }
+
+      createAnswer () {
+        this.createAnswerPeerDataChannel();
+        this.peerConnection
+          .createAnswer()
+          .then((desc) => {
+            // this.log(`RTC客户端创建的answer信令: \n${desc.sdp}`)
+            this.setLocalDescription(desc);
+            // 向服务器端提交answer
+            this.socket.emit('create_answer', desc);
+          })
+          .catch((error) => {
+            this.log(`createAnswer failed: ${error}`)
+          })
+      }
+
+      setLocalDescription (desc) {
+        // this.log(`RTC客户端SDP描述符的offer信令: \n${desc.sdp}`)
+        this.peerConnection.setLocalDescription(desc);
+      }
+
+      setRemoteDescription (desc) {
+        // this.log(`RTC客户端从服务器接口到的answer信令: \n${desc.sdp}`)
+        this.peerConnection.setRemoteDescription(desc);
+      }
+
+      onIceCandidate (e) {
+        this.peerConnection
+          .addIceCandidate(e.candidate)
+            .then(() => {
+              this.log('addIceCandidate done')
+            })
+            .catch((error) => {
+              this.log(`addIceCandidate failed: ${error}`)
+            })
+      }
+
+      accpetCandidate (candidate) {
+        this.log(`accpetCandidate: \n${JSON.stringify(candidate)}`)
+        this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+      }
+
+      onDataChannelStateChange () {
+        let readyState = this.dataChannel.readyState;
+        if (readyState === 'open') {
+          btnConnect.className = 'hidden';
+          btnClose.className = '';
+        } else {
+          btnConnect.className = '';
+          btnClose.className = 'hidden';
+        }
+        this.log(`RTC数据通道状态: ` + readyState);
+      }
+
+      createDataChannel () {
+        this.log('建立数据通道');
+        this.dataChannel = this.peerConnection.createDataChannel('dataChannel');
+        this.dataChannel.onopen = this.onDataChannelStateChange.bind(this);
+        this.dataChannel.onclose = this.onDataChannelStateChange.bind(this);
+        this.dataChannel.onmessage = this.receiveMessage.bind(this);
+      }
+
+      createOfferPeerDataChannel () {
+        this.log('建立Offer端数据通道');
+        this.dataChannel = this.peerConnection.createDataChannel('dataChannel');
+        this.dataChannel.onopen = this.onDataChannelStateChange.bind(this);
+        this.dataChannel.onclose = this.onDataChannelStateChange.bind(this);
+        this.dataChannel.onmessage = this.receiveMessage.bind(this);
+      }
+
+      createAnswerPeerDataChannel () {
+        this.log('建立Answer端数据通道');
+        this.peerConnection.ondatachannel = (e) => {
+          this.dataChannel = e.channel;
+          this.dataChannel.onopen = this.onDataChannelStateChange.bind(this);
+          this.dataChannel.onclose = this.onDataChannelStateChange.bind(this);
+          this.dataChannel.onmessage = this.receiveMessage.bind(this);
+        }
+      }
+
+      sendMessage (txt) {
+        this.dataChannel.send(txt);
+        this.log(`发送数据: ${txt}`);
+        this.logInHtml(txt, true);
+      }
+
+      receiveMessage (e) {
+        this.log(`接收数据: ${e.data}`);
+        this.logInHtml(e.data, false);
+      }
+
+      logInHtml (txt, isSendMsg) {
+        let msg = document.createElement('li');
+        msg.innerHTML = txt;
+        !!isSendMsg && (msg.className = 'right');
+        list.appendChild(msg);
+      }
+
+      log (arg) {
+        let now = (window.performance.now() / 1000).toFixed(3);
+        console.log(`${now}:`, arg);
+      }
+    }
+
+    const socketUtils = {
+      init (socket) {
+        this.socket = socket;
+        socket.on('connecting', () => {
+          console.log('WebSocket 连接中')
+        })
+        socket.on('error', (err) => {
+          console.log('WebSocket 连接错误')
+        });
+
+        socket.on('connect_failed', () => {
+          console.log('WebSocket 连接失败')
+        })
+
+        socket.on('disconnect', (data) => {
+          console.log("WebSocket 连接断开");
+        });
+
+        socket.on('reconnect', () => {
+          console.log("WebSocket 重连");
+        });
+      },
+      connect () {
+        return new Promise((resolve, reject) => {
+          this.socket.on('connect', () => {
+            console.log('WebSocket 连接成功');
+            resolve();
+          });
+        })
+      }
+    }
+
+    const ipt = document.getElementById('ipt');
+    const btnConnect = document.getElementById('btnConnect');
+    const btnSend = document.getElementById('btnSend');
+    const btnClose = document.getElementById('btnClose');
+    const list = document.getElementById('list');
+    btnConnect.addEventListener('click', () => {
+      rtcPeer.createOffer();
+    }, false)
+    btnSend.addEventListener('click', () => {
+      rtcPeer.sendMessage(ipt.value);
+      ipt.value = '';
+    }, false)
+    btnClose.addEventListener('click', () => {
+      rtcPeer.close();
+    }, false)
+
+    const socket = io.connect('ws://192.168.4.67:4000');
+    const rtcPeer = new RTCPeer(socket);
+    socketUtils.init(socket);
+    socketUtils.connect()
+      .then(() => {
+        rtcPeer.connect();
+      });
+
+    socket.on('createOffer', (sdp) => {
+      // console.log(`RTC客户端从服务器接收到的SDP Offer: \n${JSON.stringify(sdp)}`)
+      rtcPeer.setRemoteDescription(sdp);
+      rtcPeer.createAnswer();
+    })
+
+    socket.on('createAnswer', (sdp) => {
+      // console.log(`RTC客户端从服务器接收到的SDP Answer: \n${JSON.stringify(sdp)}`)
+      rtcPeer.setRemoteDescription(sdp);
+    })
+
+    socket.on('swapCandidate', (candidate) => {
+      // console.log(`RTC客户端从服务器接收到的Candidate: \n${JSON.stringify(candidate)}`)
+      rtcPeer.accpetCandidate(candidate);
+    })
+
+    window.onbeforeunload = () => {
+      rtcPeer.close();
+    }
+
+  </script>
+</body>
+</html>
