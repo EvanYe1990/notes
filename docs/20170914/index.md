@@ -7,10 +7,10 @@
 日志存放位置：/usr/local/mongodb/logs
 
 ### [下载Mongdb安装包](https://www.mongodb.com/download-center#community)
-> wget https://www.mongodb.com/download-center#community  
+> [root@iZbp14vaxi src]# wget https://www.mongodb.com/download-center#community  
 
 ```
-[root@iZbp14vaxib09lsim5s3n6Z src]# wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.9.tgz
+[root@iZbp14vaxi src]# wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.9.tgz
 --2017-09-14 13:48:34--  https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.9.tgz
 正在解析主机 fastdl.mongodb.org (fastdl.mongodb.org)... 52.84.49.94, 52.84.49.83, 52.84.49.250, ...
 正在连接 fastdl.mongodb.org (fastdl.mongodb.org)|52.84.49.94|:443... 已连接。
@@ -24,7 +24,7 @@
 ```
 
 ### 解压Mongodb安装包
-> [root@iZbp14vaxib09lsim5s3n6Z src]# tar -zxvf mongodb-linux-x86_64-3.4.9.tgz   
+> [root@iZbp14vaxi src]# tar -zxvf mongodb-linux-x86_64-3.4.9.tgz   
 
 ```
 mongodb-linux-x86_64-3.4.9/README
@@ -48,20 +48,20 @@ mongodb-linux-x86_64-3.4.9/bin/mongo
 ```
 
 ### 移动到指定目录
-> [root@iZbp14vaxib09lsim5s3n6Z src]# mv mongodb-linux-x86_64-3.4.9 /usr/local/mongodb
+> [root@iZbp14vaxi src]# mv mongodb-linux-x86_64-3.4.9 /usr/local/mongodb
 
 ### 创建数据库文件和日志目录
-> [root@iZbp14vaxib09lsim5s3n6Z mongodb]# mkdir /usr/local/mongodb/data  
-> [root@iZbp14vaxib09lsim5s3n6Z mongodb]# mkdir /usr/local/mongodb/logs  
+> [root@iZbp14vaxi mongodb]# mkdir /usr/local/mongodb/data  
+> [root@iZbp14vaxi mongodb]# mkdir /usr/local/mongodb/logs  
 
 ### 编辑开机启动配置文件rc.local
-> [root@iZbp14vaxib09lsim5s3n6Z etc]# vi /etc/rc.local  
+> [root@iZbp14vaxi etc]# vi /etc/rc.local  
 
 ### 把Mongodb添加到开机启动项内(在rc.local中添加以下配置)
 /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork
 
 ### 启动Mongodb
-> [root@iZbp14vaxib09lsim5s3n6Z etc]# /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork  
+> [root@iZbp14vaxi etc]# /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork  
 
 ```
 about to fork child process, waiting until server is ready for connections.
