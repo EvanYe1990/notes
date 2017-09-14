@@ -1,6 +1,7 @@
 # 阿里云ECS安装Mongodb数据库
 ## [下载Mongdb安装包](https://www.mongodb.com/download-center#community)
-> wget https://www.mongodb.com/download-center#community
+> wget https://www.mongodb.com/download-center#community  
+
 ```
 [root@iZbp14vaxib09lsim5s3n6Z src]# wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.9.tgz
 --2017-09-14 13:48:34--  https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.4.9.tgz
@@ -16,8 +17,9 @@
 ```
 
 ## 解压Mongodb安装包
-> [root@iZbp14vaxib09lsim5s3n6Z src]# tar -zxvf mongodb-linux-x86_64-3.4.9.tgz  
-``` 
+> [root@iZbp14vaxib09lsim5s3n6Z src]# tar -zxvf mongodb-linux-x86_64-3.4.9.tgz   
+
+```js
 mongodb-linux-x86_64-3.4.9/README
 mongodb-linux-x86_64-3.4.9/THIRD-PARTY-NOTICES
 mongodb-linux-x86_64-3.4.9/MPL-2
