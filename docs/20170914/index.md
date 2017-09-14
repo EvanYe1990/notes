@@ -2,9 +2,9 @@
 
 ## 安装说明
 上传位置：/usr/local/src
-软件安装位置：/usr/local/mongodb  
-数据存放位置：/usr/local/mongodb/data  
-日志存放位置：/usr/local/mongodb/logs 
+软件安装位置: /usr/local/mongodb  
+数据存放位置: /usr/local/mongodb/data  
+日志存放位置: /usr/local/mongodb/logs  
 
 ### [下载Mongdb安装包](https://www.mongodb.com/download-center#community)
 > [root@iZbp14vaxi src]# wget https://www.mongodb.com/download-center#community  
