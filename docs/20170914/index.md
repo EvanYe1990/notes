@@ -1,5 +1,12 @@
 # 阿里云ECS安装Mongodb数据库
-## [下载Mongdb安装包](https://www.mongodb.com/download-center#community)
+
+## 安装说明
+上传位置：/usr/local/src
+软件安装位置：/usr/local/mongodb 
+数据存放位置：/usr/local/mongodb/data 
+日志存放位置：/usr/local/mongodb/logs
+
+### [下载Mongdb安装包](https://www.mongodb.com/download-center#community)
 > wget https://www.mongodb.com/download-center#community  
 
 ```
@@ -16,10 +23,10 @@
 2017-09-14 13:54:53 (225 KB/s) - 已保存 “mongodb-linux-x86_64-3.4.9.tgz” [86766439/86766439])
 ```
 
-## 解压Mongodb安装包
+### 解压Mongodb安装包
 > [root@iZbp14vaxib09lsim5s3n6Z src]# tar -zxvf mongodb-linux-x86_64-3.4.9.tgz   
 
-```js
+```
 mongodb-linux-x86_64-3.4.9/README
 mongodb-linux-x86_64-3.4.9/THIRD-PARTY-NOTICES
 mongodb-linux-x86_64-3.4.9/MPL-2
@@ -40,5 +47,24 @@ mongodb-linux-x86_64-3.4.9/bin/mongos
 mongodb-linux-x86_64-3.4.9/bin/mongo
 ```
 
-## 移动到指定目录
+### 移动到指定目录
 > [root@iZbp14vaxib09lsim5s3n6Z src]# mv mongodb-linux-x86_64-3.4.9 /usr/local/mongodb
+
+### 创建数据库文件和日志目录
+> [root@iZbp14vaxib09lsim5s3n6Z mongodb]# mkdir /usr/local/mongodb/data  
+> [root@iZbp14vaxib09lsim5s3n6Z mongodb]# mkdir /usr/local/mongodb/logs  
+
+### 编辑开机启动配置文件rc.local
+> [root@iZbp14vaxib09lsim5s3n6Z etc]# vi /etc/rc.local  
+
+### 把Mongodb添加到开机启动项内(在rc.local中添加以下配置)
+/usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork
+
+### 启动Mongodb
+> [root@iZbp14vaxib09lsim5s3n6Z etc]# /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork  
+
+```
+about to fork child process, waiting until server is ready for connections.
+forked process: 9274
+child process started successfully, parent exiting
+```
