@@ -1,7 +1,6 @@
 # 阿里云ECS安装Mongodb数据库
 
-## 安装说明
-上传位置: /usr/local/src  
+## 安装说明  
 软件安装位置: /usr/local/mongodb  
 数据存放位置: /usr/local/mongodb/data  
 日志存放位置: /usr/local/mongodb/logs  
