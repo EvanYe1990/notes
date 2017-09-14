@@ -2,9 +2,9 @@
 
 ## 安装说明
 上传位置：/usr/local/src
-软件安装位置：/usr/local/mongodb 
-数据存放位置：/usr/local/mongodb/data 
-日志存放位置：/usr/local/mongodb/logs
+软件安装位置：/usr/local/mongodb  
+数据存放位置：/usr/local/mongodb/data  
+日志存放位置：/usr/local/mongodb/logs 
 
 ### [下载Mongdb安装包](https://www.mongodb.com/download-center#community)
 > [root@iZbp14vaxi src]# wget https://www.mongodb.com/download-center#community  
@@ -51,17 +51,17 @@ mongodb-linux-x86_64-3.4.9/bin/mongo
 > [root@iZbp14vaxi src]# mv mongodb-linux-x86_64-3.4.9 /usr/local/mongodb
 
 ### 创建数据库文件和日志目录
-> [root@iZbp14vaxi mongodb]# mkdir /usr/local/mongodb/data  
-> [root@iZbp14vaxi mongodb]# mkdir /usr/local/mongodb/logs  
+> [root@iZbp14vaxi src]# mkdir /usr/local/mongodb/data  
+> [root@iZbp14vaxi src]# mkdir /usr/local/mongodb/logs  
 
 ### 编辑开机启动配置文件rc.local
-> [root@iZbp14vaxi etc]# vi /etc/rc.local  
+> [root@iZbp14vaxi src]# vi /etc/rc.local  
 
 ### 把Mongodb添加到开机启动项内(在rc.local中添加以下配置)
 /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork
 
 ### 启动Mongodb
-> [root@iZbp14vaxi etc]# /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork  
+> [root@iZbp14vaxi src]# /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/dblog.log -fork  
 
 ```
 about to fork child process, waiting until server is ready for connections.
