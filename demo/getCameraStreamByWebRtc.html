@@ -5,11 +5,12 @@
   <title>Get Camera Stream By WebRTC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
-    html, body { margin: 0; padding: 0; width: 0; height: 100%; }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+    #video { width: 100%; }
   </style>
 </head>
 <body>
-  <video src="" id="video" autoplay></video>
+  <video id="video" autoplay></video>
   <script>
     {
       const video = document.getElementById('video');
@@ -17,8 +18,9 @@
           navigator.webkitGetUserMedia ||
           navigator.mozGetUserMedia;
       navigator.getUserMedia({
-        audio: true,
-        video: { width: 50, height: 50 },
+        audio: false,
+        // video: { width: 50, height: 50 },
+        video: true,
         frameRate: { ideal: 10, max: 15 },
         facingMode: 'user'
       }, (stream) => {
