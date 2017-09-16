@@ -24,6 +24,7 @@
         facingMode: 'user'
       }, function (stream) {
         video.srcObject = stream;
+        video.play();
       }, function (err) {
         console.log(err)
       })
