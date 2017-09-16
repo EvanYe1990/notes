@@ -31,6 +31,9 @@
         console.log(err)
         window.alert('err: ' + JSON.stringify(err))
       })
+      .then(function (stream) {
+        window.alert('stream2: ' + JSON.stringify(stream))
+      })
     }
   </script>
 </body>
