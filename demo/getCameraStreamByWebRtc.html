@@ -71,12 +71,10 @@
   <video id="video" -webkit-playsinline webkit-playsinline playsinline="true"></video>
   <ul class="btn-list">
     <li><a class="btn bgClosed" id="btnToggle">开启</a></li>
-    <!-- <li><a class="btn" id="btnBackCamera">后置摄像头</a></li> -->
-    <!-- <li><a class="btn" id="btnToggle">开启</a></li> -->
   </ul>
   <script>
-    const btnFrontCamera = document.getElementById('btnFrontCamera');
-    const btnBackCamera = document.getElementById('btnBackCamera');
+    // const btnFrontCamera = document.getElementById('btnFrontCamera');
+    // const btnBackCamera = document.getElementById('btnBackCamera');
     const btnToggle = document.getElementById('btnToggle');
 
     const Utils = {
@@ -130,43 +128,27 @@
           : 0
         canvas.setAttribute('height', this.canvasHeight);
         this.canvasCtx.drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
-        // canvas.setAttribute('height', this.screenHeight);
-        // this.canvasCtx.drawImage(video, 0, 0, this.screenWidth, this.screenHeight);
+      },
+      toggleVideo (opt) {
+        this.video.paused ? this.video.play() : this.video.pause();
+        this.hasStream = this.video.paused;
+        this.openCamera(opt)
+        btnToggle.className = Utils.video.paused ? 'btn bgClosed' : 'btn bgOpened'
+        btnToggle.innerHTML = Utils.video.paused ? '开启' : '关闭';
       }
-    }
-
-    function toggleBtnState () {
-      Utils.video.paused ? Utils.video.play() : Utils.video.pause();
-      btnToggle.className = Utils.video.paused ? 'btn bgClosed' : 'btn bgOpened'
-      btnToggle.innerHTML = Utils.video.paused ? '开启' : '关闭';
     }
 
     // 初始化
     Utils.init();
     
     btnToggle.addEventListener('click', () => {
-      Utils.openCamera({
+      Utils.toggleVideo({
         audio: false,
         video: true,
         frameRate: { ideal: 10, max: 15 },
         facingMode: 'user'
       })
-      toggleBtnState();
     }, false);
-
-    // btnBackCamera.addEventListener('click', () => {
-    //   Utils.openCamera({
-    //     audio: false,
-    //     video: true,
-    //     frameRate: { ideal: 10, max: 15 },
-    //     facingMode: 'environment'
-    //   })
-    //   toggleBtnState();
-    // }, false);
-
-    // btnToggle.addEventListener('click', function () {
-    //   toggleBtnState()
-    // }, false);
     
   </script>
 </body>
