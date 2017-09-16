@@ -22,14 +22,10 @@
         video: true,
         frameRate: { ideal: 10, max: 15 },
         facingMode: 'user'
-      }, (stream) => {
-        console.log(stream)
-        // window.alert(JSON.stringify(stream))
+      }, function (stream) {
         video.srcObject = stream;
-        video.play();
-      }, (err) => {
+      }, function (err) {
         console.log(err)
-        // window.alert(JSON.stringify(err))
       })
     }
   </script>
