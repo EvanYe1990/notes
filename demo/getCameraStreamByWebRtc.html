@@ -41,19 +41,27 @@
     .btn-list > li {
       display: inline-block;
       list-style: none;
-      width: 30%;
+      /*width: 30%;*/
     }
 
     .btn {
       display: block;
       text-align: center;
       margin: 0 auto;
-      width: 8.6rem;
-      height: 8.6rem;
-      line-height: 8.6rem;
+      width: 6rem;
+      height: 6rem;
+      line-height: 6rem;
       border-radius: 50%;
-      border: 1px solid #ccc;
       font-size: 1.4rem;
+      color: #fff;
+    }
+
+    .bgOpened {
+      background-color: #FF4141;
+    }
+
+    .bgClosed {
+      background-color: #3BCB51;
     }
 
   </style>
@@ -62,9 +70,9 @@
   <canvas id="canvas"></canvas>
   <video id="video" -webkit-playsinline webkit-playsinline playsinline="true"></video>
   <ul class="btn-list">
-    <li><a class="btn" id="btnFrontCamera">前置摄像头</a></li>
-    <li><a class="btn" id="btnBackCamera">后置摄像头</a></li>
-    <li><a class="btn" id="btnToggle">开启</a></li>
+    <li><a class="btn bgClosed" id="btnToggle">开启</a></li>
+    <!-- <li><a class="btn" id="btnBackCamera">后置摄像头</a></li> -->
+    <!-- <li><a class="btn" id="btnToggle">开启</a></li> -->
   </ul>
   <script>
     const btnFrontCamera = document.getElementById('btnFrontCamera');
@@ -74,6 +82,7 @@
     const Utils = {
       init: function () {
         this.ctxTimer = '';
+        this.hasStream = false;
         this.video = document.getElementById('video');
         this.video.autoplay = true;
         this.canvas = document.getElementById('canvas');
@@ -95,16 +104,19 @@
         document.removeEventListener('touchmove', preventDefualt, false);
       },
       openCamera (opt) {
+        if (Utils.hasStream) {
+          return false;
+        }
         navigator.getUserMedia = navigator.getUserMedia ||
           navigator.webkitGetUserMedia ||
           navigator.mozGetUserMedia;
         navigator.getUserMedia(opt, (stream) => {
           this.video.srcObject = stream;
+          this.hasStream = true;
           this.renderImageByCanvas();
         }, (err) => {
           console.log(err)
         })
-        toggleBtnState();
       },
       renderImageByCanvas () {
         clearInterval(this.ctxTimer)
@@ -125,32 +137,36 @@
 
     function toggleBtnState () {
       Utils.video.paused ? Utils.video.play() : Utils.video.pause();
-      btnToggle.innerHTML = Utils.video.paused ? '开启' : '关闭'
+      btnToggle.className = Utils.video.paused ? 'btn bgClosed' : 'btn bgOpened'
+      btnToggle.innerHTML = Utils.video.paused ? '开启' : '关闭';
     }
 
     // 初始化
     Utils.init();
-    btnFrontCamera.addEventListener('click', () => {
+    
+    btnToggle.addEventListener('click', () => {
       Utils.openCamera({
         audio: false,
         video: true,
         frameRate: { ideal: 10, max: 15 },
         facingMode: 'user'
       })
+      toggleBtnState();
     }, false);
 
-    btnBackCamera.addEventListener('click', () => {
-      Utils.openCamera({
-        audio: false,
-        video: true,
-        frameRate: { ideal: 10, max: 15 },
-        facingMode: 'environment'
-      })
-    }, false);
+    // btnBackCamera.addEventListener('click', () => {
+    //   Utils.openCamera({
+    //     audio: false,
+    //     video: true,
+    //     frameRate: { ideal: 10, max: 15 },
+    //     facingMode: 'environment'
+    //   })
+    //   toggleBtnState();
+    // }, false);
 
-    btnToggle.addEventListener('click', function () {
-      toggleBtnState()
-    }, false);
+    // btnToggle.addEventListener('click', function () {
+    //   toggleBtnState()
+    // }, false);
     
   </script>
 </body>
