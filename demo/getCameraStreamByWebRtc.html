@@ -4,54 +4,133 @@
   <meta charset="UTF-8">
   <title>Get Camera Stream By WebRTC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="WebRTC">
+  <!-- uc强制竖屏 -->
+  <meta name="screen-orientation" content="portrait">
+  <!-- UC强制全屏 --> 
+  <meta name="full-screen" content="yes">
+  <!-- UC应用模式 --> 
+  <meta name="browsermode" content="application">
+  <!-- QQ强制竖屏 -->
+  <meta name="x5-orientation" content="portrait">
+  <!-- QQ强制全屏 -->
+  <meta name="x5-fullscreen" content="true">
+  <!-- QQ应用模式 -->
+  <meta name="x5-page-mode" content="app">
+  <!-- 是针对一些老的不识别viewport的浏览器，列如黑莓 -->
+  <meta name="HandheldFriendly" content="true">
+  <!-- 微软的老式浏览器 -->
+  <meta name="MobileOptimized" content="320">
   <style>
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
-    #video { width: 200px; height: 200px; }
-    .btnBox {
-      text-align:center;
+    html, body, ul, li { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;}
+    html { font-size: 10px; }
+    #video { width: 100%;  height: 0; }
+    #canvas { width: 100%; }
+
+    .btn-list {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding: 2.4rem 0;
+      height: auto;
     }
-    .btnBox > a { 
-      display: inline-block; 
-      padding: 5px 16px; 
+
+    .btn-list > li {
+      display: inline-block;
+      list-style: none;
+      width: 48%;
+    }
+
+    .btn {
+      display: block;
+      text-align: center;
+      margin: 0 auto;
+      width: 8.6rem;
+      height: 8.6rem;
+      line-height: 8.6rem;
+      border-radius: 50%;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      font-size: 1.4rem;
     }
+
   </style>
 </head>
 <body>
+  <canvas id="canvas"></canvas>
   <video id="video"></video>
-  <p class="btnBox">
-    <a id="btnCamera">打开摄像头</a>
-    <a id="btnToggle">启动／暂停</a>
-  </p>
+  <ul class="btn-list">
+    <li><a class="btn" id="btnCamera">打开摄像头</a></li>
+    <li><a class="btn" id="btnToggle">启动</a></li>
+  </ul>
   <script>
-    const video = document.getElementById('video');
     const btnCamera = document.getElementById('btnCamera');
     const btnToggle = document.getElementById('btnToggle');
 
-    function openActiveCamera () {
-      navigator.getUserMedia = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia;
-      navigator.getUserMedia({
-        audio: false,
-        video: true,
-        // frameRate: { ideal: 10, max: 15 },
-        // facingMode: ''
-      }, function (stream) {
-        video.srcObject = stream;
-      }, function (err) {
-        console.log(err)
-        window.alert('err: ' + JSON.stringify(err))
-      })
+    const Utils = {
+      init: function () {
+        this.ctxTimer = '';
+        this.video = document.getElementById('video');
+        this.canvas = document.getElementById('canvas');
+        this.canvasCtx = canvas.getContext('2d');
+        this.screenWidth = window.screen.width;
+        this.screenHeight = window.screen.height;
+        this.canvasWidth = window.screen.width;
+
+        canvas.setAttribute('width', this.screenWidth);
+      },
+      preventDefualt: function (e) {
+        e.preventDefualt && e.preventDefualt();
+        return false;
+      },
+      disableScollPage () {
+        document.addEventListener('touchmove', preventDefualt, false);
+      },
+      enableScollPage () {
+        document.removeEventListener('touchmove', preventDefualt, false);
+      },
+      openActiveCamera (opt) {
+        navigator.getUserMedia = navigator.getUserMedia ||
+          navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia;
+        navigator.getUserMedia(opt, (stream) => {
+          this.video.srcObject = stream;
+          this.renderImageByCanvas();
+        }, () => {
+          console.log(err)
+        })
+      },
+      renderImageByCanvas () {
+        clearInterval(this.ctxTimer)
+        this.ctxTimer = setInterval(() => {
+          this.drawVideoByCanvas();
+        }, 16);
+      },
+      drawVideoByCanvas () {
+        this.canvasHeight = video.videoWidth > 0
+          ? (this.screenWidth * video.videoHeight / video.videoWidth)
+          : 0
+        canvas.setAttribute('height', this.canvasHeight);
+        this.canvasCtx.drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
+      }
     }
 
+    // 初始化
+    Utils.init();
     btnCamera.addEventListener('click', function () {
-      openActiveCamera();
+      Utils.openActiveCamera({
+        audio: false,
+        video: true,
+        frameRate: { ideal: 10, max: 15 },
+        facingMode: 'user'
+      })
+      Utils.video.play();
     }, false);
 
     btnToggle.addEventListener('click', function () {
-      video.play();
+      Utils.video.play();
     }, false);
     
   </script>
