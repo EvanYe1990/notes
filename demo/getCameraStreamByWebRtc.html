@@ -133,6 +133,7 @@
         this.video.paused ? this.video.play() : this.video.pause();
         this.hasStream = this.video.paused;
         this.openCamera(opt)
+        this.video.style.display = Utils.video.paused ? 'block' : 'none';
         btnToggle.className = Utils.video.paused ? 'btn bgClosed' : 'btn bgOpened'
         btnToggle.innerHTML = Utils.video.paused ? '开启' : '关闭';
       }
