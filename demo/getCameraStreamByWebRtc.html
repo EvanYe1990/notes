@@ -98,7 +98,7 @@
         navigator.getUserMedia(opt, (stream) => {
           this.video.srcObject = stream;
           this.renderImageByCanvas();
-        }, () => {
+        }, (err) => {
           console.log(err)
         })
       },
