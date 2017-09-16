@@ -7,34 +7,52 @@
   <style>
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
     #video { width: 200px; height: 200px; }
+    .btnBox {
+      text-align:center;
+    }
+    .btnBox > a { 
+      display: inline-block; 
+      padding: 5px 16px; 
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
   <video id="video"></video>
-
+  <p class="btnBox">
+    <a id="btnCamera">打开摄像头</a>
+    <a id="btnToggle">启动／暂停</a>
+  </p>
   <script>
-    try {
-      const video = document.getElementById('video');
+    const video = document.getElementById('video');
+    const btnCamera = document.getElementById('btnCamera');
+    const btnToggle = document.getElementById('btnToggle');
+
+    function openActiveCamera () {
       navigator.getUserMedia = navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia;
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia;
       navigator.getUserMedia({
         audio: false,
         video: true,
         // frameRate: { ideal: 10, max: 15 },
         // facingMode: ''
       }, function (stream) {
-        window.alert(stream)
         video.srcObject = stream;
-        video.autoplay = true;
-        video.play();
       }, function (err) {
         console.log(err)
         window.alert('err: ' + JSON.stringify(err))
       })
-    } catch (e) {
-      window.alert(JSON.stringify(e))
     }
+
+    btnCamera.addEventListener('click', function () {
+      openActiveCamera();
+    }, false);
+
+    btnToggle.addEventListener('click', function () {
+      video.play();
+    }, false);
     
   </script>
 </body>
