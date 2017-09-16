@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Get Camera Stream By WebRTC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+</head>
+<body>
+  <video src="" id="video" autoplay></video>
+  <script>
+    {
+      const video = document.getElementById('video');
+      navigator.getUserMedia = navigator.getUserMedia ||
+          navigator.webkitGetUserMedia ||
+          navigator.mozGetUserMedia;
+      navigator.getUserMedia({
+        audio: true,
+        video: { width: 50, height: 50 },
+        frameRate: { ideal: 10, max: 15 },
+        facingMode: 'user'
+      }, (stream) => {
+        video.srcObject = stream;
+      }, (err) => {
+        console.log(err)
+      })
+    }
+  </script>
+</body>
+</html>
