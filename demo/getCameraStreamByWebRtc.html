@@ -75,6 +75,7 @@
       init: function () {
         this.ctxTimer = '';
         this.video = document.getElementById('video');
+        this.video.autoplay = true;
         this.canvas = document.getElementById('canvas');
         this.canvasCtx = canvas.getContext('2d');
         this.screenWidth = window.screen.width;
@@ -112,11 +113,13 @@
         }, 16);
       },
       drawVideoByCanvas () {
-        this.canvasHeight = video.videoWidth > 0
-          ? (this.screenWidth * video.videoHeight / video.videoWidth)
-          : 0
-        canvas.setAttribute('height', this.canvasHeight);
-        this.canvasCtx.drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
+        // this.canvasHeight = video.videoWidth > 0
+        //   ? (this.screenWidth * video.videoHeight / video.videoWidth)
+        //   : 0
+        // canvas.setAttribute('height', this.canvasHeight);
+        // this.canvasCtx.drawImage(video, 0, 0, this.canvasWidth, this.canvasHeight);
+        canvas.setAttribute('height', this.screenHeight);
+        this.canvasCtx.drawImage(video, 0, 0, this.screenWidth, this.screenHeight);
       }
     }
 
