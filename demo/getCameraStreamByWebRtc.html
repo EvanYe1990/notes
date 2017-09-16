@@ -18,16 +18,18 @@
           navigator.webkitGetUserMedia ||
           navigator.mozGetUserMedia;
 
-      navigator.mediaDevices.getUserMedia({
+      navigator.getUserMedia({
         audio: false,
-        video: true
-        // frameRate: { ideal: 10, max: 15 }
-        // facingMode: 'user'
+        video: true,
+        frameRate: { ideal: 10, max: 15 },
+        facingMode: 'user'
       }, function (stream) {
-        video.srcObject = stream;
+        window.alert('stream: ' + JSON.stringify(stream))
+        // video.srcObject = stream;
         video.play();
       }, function (err) {
         console.log(err)
+        window.alert('err: ' + JSON.stringify(err))
       })
     }
   </script>
