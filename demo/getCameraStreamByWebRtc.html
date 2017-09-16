@@ -41,7 +41,7 @@
     .btn-list > li {
       display: inline-block;
       list-style: none;
-      width: 48%;
+      width: 30%;
     }
 
     .btn {
@@ -62,11 +62,13 @@
   <canvas id="canvas"></canvas>
   <video id="video" -webkit-playsinline webkit-playsinline playsinline="true"></video>
   <ul class="btn-list">
-    <li><a class="btn" id="btnCamera">打开摄像头</a></li>
-    <li><a class="btn" id="btnToggle">启动</a></li>
+    <li><a class="btn" id="btnFrontCamera">前置摄像头</a></li>
+    <li><a class="btn" id="btnBackCamera">后置摄像头</a></li>
+    <li><a class="btn" id="btnToggle">开启</a></li>
   </ul>
   <script>
-    const btnCamera = document.getElementById('btnCamera');
+    const btnFrontCamera = document.getElementById('btnFrontCamera');
+    const btnBackCamera = document.getElementById('btnBackCamera');
     const btnToggle = document.getElementById('btnToggle');
 
     const Utils = {
@@ -91,7 +93,7 @@
       enableScollPage () {
         document.removeEventListener('touchmove', preventDefualt, false);
       },
-      openActiveCamera (opt) {
+      openCamera (opt) {
         navigator.getUserMedia = navigator.getUserMedia ||
           navigator.webkitGetUserMedia ||
           navigator.mozGetUserMedia;
@@ -101,6 +103,7 @@
         }, (err) => {
           console.log(err)
         })
+        toggleBtnState();
       },
       renderImageByCanvas () {
         clearInterval(this.ctxTimer)
@@ -117,20 +120,33 @@
       }
     }
 
+    function toggleBtnState () {
+      Utils.video.paused ? Utils.video.play() : Utils.video.pause();
+      btnToggle.innerHTML = Utils.video.paused ? '开启' : '关闭'
+    }
+
     // 初始化
     Utils.init();
-    btnCamera.addEventListener('click', function () {
-      Utils.openActiveCamera({
+    btnFrontCamera.addEventListener('click', () => {
+      Utils.openCamera({
         audio: false,
         video: true,
         frameRate: { ideal: 10, max: 15 },
         facingMode: 'user'
       })
-      Utils.video.play();
+    }, false);
+
+    btnBackCamera.addEventListener('click', () => {
+      Utils.openCamera({
+        audio: false,
+        video: true,
+        frameRate: { ideal: 10, max: 15 },
+        facingMode: 'environment'
+      })
     }, false);
 
     btnToggle.addEventListener('click', function () {
-      Utils.video.play();
+      toggleBtnState()
     }, false);
     
   </script>
