@@ -17,8 +17,6 @@
       navigator.getUserMedia = navigator.getUserMedia ||
           navigator.webkitGetUserMedia ||
           navigator.mozGetUserMedia;
-      window.alert(navigator.mediaDevices.getUserMedia)
-      window.alert(navigator.getUserMedia)
       navigator.getUserMedia({
         audio: false,
         video: true,
@@ -26,11 +24,12 @@
         facingMode: 'user'
       }, (stream) => {
         console.log(stream)
-        window.alert(JSON.stringify(stream))
+        // window.alert(JSON.stringify(stream))
         video.srcObject = stream;
+        video.play();
       }, (err) => {
         console.log(err)
-        window.alert(JSON.stringify(err))
+        // window.alert(JSON.stringify(err))
       })
     }
   </script>
