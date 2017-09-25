@@ -143,11 +143,13 @@
     Utils.init();
     
     btnToggle.addEventListener('click', () => {
+      alert('environment')
       Utils.toggleVideo({
         audio: false,
         video: true,
         frameRate: { ideal: 10, max: 15 },
-        facingMode: 'user' // user
+        // facingMode: 'user',
+        facingMode: { exact: "environment" }
       })
     }, false);
     
