@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Face Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    .canvas-box {
+      position: relative;
+    }
+
+    .face-box {
+      position: absolute;
+      border: 2px solid red;
+    }
+    #localVideo { width: 100%; max-width: 600px;}
+  </style>
+ <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> -->
+  <!-- <script src="utils/socket.js"></script> -->
+  <script src="utils/media.js"></script>
+</head>
+<body>
+  <section class="canvas-box">
+    <canvas id="canvas"></canvas>
+    <section id="faceBox" class="face-box"></section>
+  </section>
+  <video id="localVideo" -webkit-playsinline webkit-playsinline playsinline="true" autoplay></video>
+</body>
+<script>
+  'use strict'
+  let localVideo = document.getElementById('localVideo');
+  let faceBox = document.getElementById('faceBox');
+  let canvasBox = document.getElementById('canvas');
+  let canvasCtx = canvasBox.getContext('2d');
+  let timer = null
+
+  // 判断是否支持 WebAssembly
+  if (!('WebAssembly' in window)) {
+    alert('当前浏览器不支持 WebAssembly！');
+  }
+  // Loads a WebAssembly dynamic library, returns a promise.
+  // imports is an optional imports object
+  function loadWebAssembly(filename, imports) {
+    // Fetch the file and compile it
+    return fetch(filename, {
+      mode: "no-cors"
+    })
+      .then(response => response.arrayBuffer())
+      .then(buffer => WebAssembly.compile(buffer))
+      .then(module => {
+        // Create the imports for the module, including the
+        // standard dynamic library imports
+        imports = imports || {};
+        imports.env = imports.env || {};
+        imports.env.memoryBase = imports.env.memoryBase || 0;
+        imports.env.tableBase = imports.env.tableBase || 0;
+        if (!imports.env.memory) {
+          imports.env.memory = new WebAssembly.Memory({ initial: 256 });
+        }
+        if (!imports.env.table) {
+          imports.env.table = new WebAssembly.Table({ initial: 0, element: 'anyfunc' });
+        }
+        // Create the instance.
+        return new WebAssembly.Instance(module, imports);
+      });
+    }
+
+  const openCamera = () => {
+    // 开启摄像头
+    getMediaStreamFromCamera()
+      .then(stream => {
+        // 加载摄像头视频流
+        return loadStreamInVideo(localVideo, stream)
+      })
+      .then((videoBoxWidthHeight) => {
+        // 初始化Canvas区域
+        initCanvasBox(canvasBox, videoBoxWidthHeight)
+        // 绘制摄像头视频流
+        renderStreamInCanvas(canvasCtx, localVideo, videoBoxWidthHeight)
+      })
+      .then(() => {
+        clearInterval(timer)
+        timer = setInterval(() => {
+          let imageURL = canvasBox.toDataURL();
+          socket.emit('client_camera_image', imageURL);
+        }, 1000)
+      })
+      .catch(err => {
+        console.log(`getUserMedia error: ${err.name}`);
+      })
+  }
+
+  const name = 'http://h5.igapper.com/webrtc/wasm/cv-wasm';
+  const Module = {
+    preRun: [],
+    postRun: [],
+    wasmBinaryFile: `${name}.wasm`,
+    print: text => console.log(text),
+    printErr: text => console.error(text),
+  };
+  fetch(`${name}.wasm`, {
+     mode: "no-cors"
+  })
+    .then(res => res.arrayBuffer())
+    .then(buffer => {
+      Module.wasmBinary = buffer;
+      const oScript = document.createElement("script");
+      oScript.src = `${name}.js`;
+      oScript.addEventListener('load', (e) => {
+        console.log(`${name}.js loaded`);
+        console.log(window.cv)
+        // openCamera();
+      });
+      document.body.appendChild(oScript);
+    })
+
+  // socket.on('server_face_data', (data) => {
+  //   console.log(JSON.stringify(data));
+  //   drawFaces(faceBox, data);
+  // })
+</script>
+</html>
