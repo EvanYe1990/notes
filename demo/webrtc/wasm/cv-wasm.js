@@ -38,7 +38,7 @@
                 }
                 var PACKAGE_NAME = "../../build/cv-wasm.data";
                 // yyw 修改路径
-                var REMOTE_PACKAGE_BASE = "https://evanye1990.github.io/notes/demo/webrtc/cv-wasm.data";
+                var REMOTE_PACKAGE_BASE = "cv-wasm.data";
                 if (typeof Module["locateFilePackage"] === "function" && !Module["locateFile"]) {
                     Module["locateFile"] = Module["locateFilePackage"];
                     Module.printErr("warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)")
