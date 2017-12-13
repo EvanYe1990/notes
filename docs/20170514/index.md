@@ -1,6 +1,6 @@
 # 申请Let's Encrypt的SSL证书，拥抱HTTPS 
 
-[Let's Encrypt官网配置教程](https://certbot.eff.org/#centos6-nginx)  
+[Let's Encrypt官网配置教程](https://certbot.eff.org/#centos6-nginx) 
 
 ### 选择服务器类型和系统环境
 ![](1.png)
