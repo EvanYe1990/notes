@@ -121,4 +121,4 @@ server {
 ```
 
 ### 重启Nginx
-> /usr/local/nginx/sbin/nginx -s reload  
+> [root@iZbp14vaxib09 local]# /usr/local/nginx/sbin/nginx -s reload  
