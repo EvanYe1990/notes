@@ -16,8 +16,6 @@
     }
     #localVideo { width: 100%; max-width: 600px;}
   </style>
- <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script> -->
-  <!-- <script src="utils/socket.js"></script> -->
   <script src="utils/media.js"></script>
 </head>
 <body>
@@ -79,13 +77,6 @@
         // 绘制摄像头视频流
         renderStreamInCanvas(canvasCtx, localVideo, videoBoxWidthHeight)
       })
-      .then(() => {
-        clearInterval(timer)
-        timer = setInterval(() => {
-          let imageURL = canvasBox.toDataURL();
-          socket.emit('client_camera_image', imageURL);
-        }, 1000)
-      })
       .catch(err => {
         console.log(`getUserMedia error: ${err.name}`);
       })
@@ -110,7 +101,7 @@
       oScript.addEventListener('load', (e) => {
         console.log(`${name}.js loaded`);
         console.log(window.cv)
-        // openCamera();
+        openCamera();
       });
       document.body.appendChild(oScript);
     })

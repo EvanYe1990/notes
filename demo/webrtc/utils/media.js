@@ -1,3 +1,5 @@
+let classfier = ''
+
 const getMediaStreamFromCamera = () => {
   // 兼容老版本
   const promisifiedOldGUM = function (constraints) {
@@ -58,6 +60,31 @@ const renderStreamInCanvas = (canvasCtx, videoBox, opt) => {
   window.requestAnimationFrame(() => {
     renderStreamInCanvas(canvasCtx, videoBox, opt)
   })
+}
+
+// 本地OpenCV人脸检测
+const localOpenCvFaceDetect = (canvasCtx, videoBox, opt) => {
+  if (!classfier || classfier === '') {
+    classfier = new cv.CascadeClassifier();
+    classfier.load('../../test/data/haarcascade_frontalface_default.xml');
+  }
+  const imageData = canvasCtx.getImageData(0, 0, opt.width, opt.height);
+  const img = cv.matFromArray(imageData, 24);
+  const imgGray = new cv.Mat();
+  const rect = [];
+  cv.cvtColor(img, imgGray, cv.ColorConversionCodes.COLOR_RGBA2GRAY.value, 0);
+  const faces = new cv.RectVector();
+  classfier.detectMultiScale(imgGray, faces, 1.1, 3, 0, [0, 0], [0, 0]);
+  for (let i = 0; i < faces.size(); i += 1) {
+      rect.push(faces.get(i));
+  }
+  img.delete();
+  faces.delete();
+  imgGray.delete();
+  console.log(`rect: ${rect}`);
+  // window.requestAnimationFrame(() => {
+  //   localOpenCvFaceDetect(canvasCtx, videoBox, opt)
+  // })
 }
 
 const renderFrame = (canvasCtx, videoBox) => {

@@ -1,2 +1,2 @@
-# Mac下安装Nginx  
+# CentOS安装Nginx  
 
